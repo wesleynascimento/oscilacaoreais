@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#teste
 import numpy as np
 import matplotlib.pyplot as plt
 
