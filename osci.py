@@ -2,12 +2,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-A=[1,2,3,4,5,6,7,8]
+mi=0.003
 w=1.
 dt=0.01
+g=9.8
+x=[10]
+v=[0.]
+t=[0.]
+e=[0.]
+a=[0.]
+
+for tt in range(100000):
+  x.append((x[-1]+v[-1]*dt+0.5*a[-1]*dt**2))
+  t.append(t[-1]+dt)
+  a.append(-np.sign(v[-1])*mi*g-w*x[-1])
+  v.append(v[-1]+0.5*(a[-1]+a[-2])*dt)
+  e.append(v[-1]**2/2.+w*x[-1]**2/2.)
+  
+
+
 
 plt.figure(figsize=(8,5), dpi=96)
-plt.axis([0,10,-9,9])
+plt.axis([0,200,-20,20])
 plt.xticks(np.linspace(0,10,11,endpoint=True))
 
 ax = plt.gca()
@@ -24,29 +40,12 @@ plt.rc('font', **{'sans-serif' : 'Arial', 'family' : 'sans-serif'})
 plt.xlabel(r'\textit{Tempo} (s)')
 plt.ylabel(r'\textit{$x(t)$}')
 
-#plt.yticks(np.linspace(-1,1,5,endpoint=True),
-#	[r'$- A$',r'$- \frac{A}{2}$','',r'$\frac{A}{2}$',r'$A$'])
-plt.title(r'Oscilador Harm\^{o}nico - verlet', fontsize=18)
+plt.yticks(np.linspace(-10,10,5,endpoint=True),
+	[r'$- A$',r'$- \frac{A}{2}$','',r'$\frac{A}{2}$',r'$A$'])
+plt.title(r'Oscilador Harm\^{o}nico com atrito- verlet', fontsize=18)
 
-for xi in A:
- x=[xi]
- v=[0.]
- t=[0.]
- e=[0.]
- de=[0.]
- xa=[0.]
- a=[-w*x[-1]]
- for tt in range(1000):
-  x.append((x[-1]+v[-1]*dt+0.5*a[-1]*dt**2))
-  t.append(t[-1]+dt)
-  a.append(-w*x[-1])
-  v.append(v[-1]+0.5*(a[-1]+a[-2])*dt)
-  e.append(v[-1]**2/2.+w*x[-1]**2/2.)
-  de.append((e[-1]-0.5)/0.5)
-  xa.append(x[-1]/xi)
- print xi
- plt.plot(t,x,linewidth=1.5, label="A=%d" %xi)  
- del x,t,a,v,e,de,xa
-plt.legend(loc=9, mode='expand', ncol=8,prop={'size':6})
+
+plt.plot(t,x,linewidth=1.5, label=r'\textit{$\mu = 0.003$}' )  
+plt.legend(loc=0, mode='expand', ncol=0,prop={'size':6})
 plt.savefig("verletx.pdf",dpi=96)
 
