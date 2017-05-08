@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
-
+import math
 mi=0.003
 w=1.
 dt=0.01
@@ -18,12 +18,14 @@ for tt in range(100000):
   a.append(-np.sign(v[-1])*mi*g-w*x[-1])
   v.append(v[-1]+0.5*(a[-1]+a[-2])*dt)
   e.append(v[-1]**2/2.+w*x[-1]**2/2.)
+  if x[-1] == 0:
+   print t
   
 
 
 
 plt.figure(figsize=(8,5), dpi=96)
-plt.axis([0,200,-20,20])
+plt.axis([0,50,-20,20])
 plt.xticks(np.linspace(0,10,11,endpoint=True))
 
 ax = plt.gca()
@@ -42,9 +44,18 @@ plt.ylabel(r'\textit{$x(t)$}')
 
 plt.yticks(np.linspace(-10,10,5,endpoint=True),
 	[r'$- A$',r'$- \frac{A}{2}$','',r'$\frac{A}{2}$',r'$A$'])
+
+plt.xticks(np.linspace(2*math.pi,12*math.pi,2*math.pi,endpoint=True),
+	[r'$2\pi $',r'$4\pi$',r'$6\pi$',r'$8\pi$',r'$10\pi$',r'$12\pi$'])
+
 plt.title(r'Oscilador Harm\^{o}nico com atrito- verlet', fontsize=18)
 
+plt.axhline(y=10)
+plt.axhline(y=-10)
 
+plt.axvline(x=6*math.pi)
+plt.axvline(x=4*math.pi)
+plt.axvline(x=2*math.pi)
 plt.plot(t,x,linewidth=1.5, label=r'\textit{$\mu = 0.003$}' )  
 plt.legend(loc=0, mode='expand', ncol=0,prop={'size':6})
 plt.savefig("verletx.pdf",dpi=96)
